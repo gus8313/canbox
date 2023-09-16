@@ -10,6 +10,7 @@
 #define USE_SKODA_FABIA
 #define USE_Q3_2015
 #define USE_TOYOTA_PREMIO_26X
+#define USE_MERCEDES_W203_2005
 
 static float scale(float value, float in_min, float in_max, float out_min, float out_max)
 {
@@ -53,6 +54,9 @@ typedef struct car_state_t
 	uint32_t temp;
 	uint8_t fuel_lvl;
 	uint8_t low_fuel_lvl;
+	
+	struct tpms_t tpms;
+
 } car_state_t;
 
 static car_state_t carstate =
@@ -88,6 +92,9 @@ static car_state_t carstate =
 	.temp = 0,
 	.fuel_lvl = 0,
 	.low_fuel_lvl = STATE_UNDEF,
+	
+	.tpms = { .state = STATE_UNDEF, },
+
 };
 
 typedef struct car_air_state_t
@@ -146,6 +153,8 @@ typedef struct key_state_t
 	uint8_t key_cont;
 	uint8_t key_navi;
 	uint8_t key_mici;
+	uint8_t key_telsend;
+	uint8_t key_telend;
 
 	struct key_cb_t * key_cb;
 } key_state_t;
@@ -159,6 +168,8 @@ static struct key_state_t key_state =
 	.key_cont = STATE_UNDEF,
 	.key_navi = STATE_UNDEF,
 	.key_mici = STATE_UNDEF,
+	.key_telsend = STATE_UNDEF,
+	.key_telend = STATE_UNDEF,
 	.key_cb = 0,
 };
 
@@ -207,6 +218,10 @@ uint8_t is_timeout(struct msg_desc_t * desc)
 
 #ifdef USE_TOYOTA_PREMIO_26X
 #include "cars/toyota_premio_26x.c"
+#endif
+
+#ifdef USE_MERCEDES_W203_2005
+#include "cars/mercedes_w203_2005.c"
 #endif
 
 enum e_car_t car_get_next_car(void)
@@ -294,6 +309,8 @@ void car_init(enum e_car_t car, struct key_cb_t * cb)
 	carstate.park_lights = STATE_UNDEF,
 	carstate.near_lights = STATE_UNDEF,
 	carstate.park_break = STATE_UNDEF,
+	
+	carstate.tpms.state = STATE_UNDEF,
 
 	key_state.key_cb = cb;
 
@@ -302,6 +319,8 @@ void car_init(enum e_car_t car, struct key_cb_t * cb)
 		speed = e_speed_100;
 	else if (car == e_car_toyota_premio_26x)
 		speed = e_speed_500;
+	else if (car == e_car_w203_2005my)
+		speed = e_speed_83k3;
 	hw_can_set_speed(hw_can_get_mscan(), speed);
 }
 
@@ -347,6 +366,11 @@ void car_process(uint8_t ticks)
 		case e_car_toyota_premio_26x:
 #ifdef USE_TOYOTA_PREMIO_26X
 			in_process(can, ticks, toyota_premio_26x_ms, sizeof(toyota_premio_26x_ms)/sizeof(toyota_premio_26x_ms[0]));
+#endif
+			break;
+		case e_car_w203_2005my:
+#ifdef USE_MERCEDES_W203_2005
+			in_process(can, ticks, mercedes_w203_2005my_ms, sizeof(mercedes_w203_2005my_ms)/sizeof(mercedes_w203_2005my_ms[0]));
 #endif
 			break;
 		default:
@@ -693,5 +717,9 @@ uint8_t car_get_air_r_seat(void)
 		return 0;
 
 	return car_air_state.r_seat;
+}
+void car_get_tpms(struct tpms_t * r)
+{
+	memcpy(r, &carstate.tpms, sizeof(tpms_t));
 }
 

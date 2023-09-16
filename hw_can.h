@@ -5,7 +5,8 @@
 
 typedef enum e_speed_t
 {
-	e_speed_100 = 0,
+	e_speed_83k3 = 0,
+	e_speed_100,
 	e_speed_125,
 	e_speed_250,
 	e_speed_500,

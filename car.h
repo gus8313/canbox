@@ -51,6 +51,28 @@ typedef struct radar_t
 	uint8_t rr;
 } radar_t;
 
+enum e_tpms_t
+{
+	e_tpms_undef = 0,
+	e_tpms_off,
+	e_tpms_on,
+};
+
+typedef struct tpms_t
+{
+	uint8_t state;
+	//front left
+	uint8_t fl;
+	//fron right
+	uint8_t fr;
+	//rear left
+	uint8_t rl;
+	//rear right
+	uint8_t rr;
+	//spare
+	uint8_t spr;
+} radar_t;
+
 typedef struct key_cb_t
 {
 	void (*mode)(void);
@@ -61,6 +83,8 @@ typedef struct key_cb_t
 	void (*navi)(void);
 	void (*cont)(void);
 	void (*mici)(void);
+	void (*telsend)(void);
+	void (*telend)(void);
 } key_cb_t;
 
 void car_init(enum e_car_t car, struct key_cb_t * cb);
@@ -120,6 +144,8 @@ uint8_t car_get_air_l_temp(void);
 uint8_t car_get_air_r_temp(void);
 uint8_t car_get_air_l_seat(void);
 uint8_t car_get_air_r_seat(void);
+
+void car_get_tpms(struct tpms_t * tpms);
 
 #ifdef __cplusplus
 }
