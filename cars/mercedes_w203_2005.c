@@ -49,7 +49,7 @@ static void mercedes_w203_2005my_ms_00B2_handler(const uint8_t * msg, struct msg
 		memcpy(carstate.vin + 10, msg + 1, 7);
 }
 /*
-static void q3_2015_ms_65D_handler(const uint8_t * msg, struct msg_desc_t * desc)
+static void mercedes_w203_2005my_ms_009E_handler(const uint8_t * msg, struct msg_desc_t * desc)
 {
 	if (is_timeout(desc)) {
 
@@ -118,7 +118,7 @@ static void mercedes_w203_2005my_ms_0003_handler(const uint8_t * msg, struct msg
 	else
 		carstate.selector = STATE_UNDEF;
 
-	carstate.speed = (msg[4] * 256) + (msg[3] & 0x3F) //1/min
+	carstate.speed = (msg[4] * 256) + (msg[3] & 0x3F); //1/min
 
 }
 
@@ -259,13 +259,13 @@ static void mercedes_w203_2005my_ms_000A_handler(const uint8_t * msg, struct msg
 		return;
 	}
 
-//	carstate.fuel_lvl = msg[3] & 0x7F; // ? fuel level
+//	carstate.fuel_lvl = (msg[3] & 0x7F; // ? fuel level
 
 // Handbrake: Bit 18 size 1
-	carstate.park_break = msg[2] & (1<<6)) ? 1 : 0;
+	carstate.park_break = (msg[2] & (1<<6)) ? 1 : 0;
 
 // Washer low: Bit 25 size 1
-	carstate.low_washer = msg[3] & (1<<7)) ? 1 : 0;
+	carstate.low_washer = (msg[3] & (1<<7)) ? 1 : 0;
 
 //	if ((msg[3] & 0x80) == 0x80)
 //		carstate.low_fuel_lvl = 1;
@@ -376,7 +376,7 @@ static struct msg_desc_t mercedes_w203_2005my_ms[] =
 {
 	{ 0x0000,  100, 0, 0, mercedes_w203_2005my_ms_0000_handler }, // ACC
 	{ 0x00B2,  200, 0, 0, mercedes_w203_2005my_ms_00B2_handler }, // VIN
-	{ 0x009E, 1000, 0, 0, mercedes_w203_2005my_ms_009E_handler }, // Odometer
+//	{ 0x009E, 1000, 0, 0, mercedes_w203_2005my_ms_009E_handler }, // Odometer
 //	{ 0x571,  600, 0, 0, mercedes_w203_2005my_ms_571_handler }, // Voltage
 	{ 0x0004,   50, 0, 0, mercedes_w203_2005my_ms_0004_handler }, // Doors
 	{ 0x0003,  100, 0, 0, mercedes_w203_2005my_ms_0003_handler }, // Gear selector

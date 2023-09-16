@@ -71,7 +71,7 @@ typedef struct tpms_t
 	uint8_t rr;
 	//spare
 	uint8_t spr;
-} radar_t;
+} tpms_t;
 
 typedef struct key_cb_t
 {
