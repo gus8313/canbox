@@ -299,7 +299,7 @@ void print_debug(void)
 			scar = "TOYOTA PREMIO 26x";
 			break;
 		case e_car_w203_2005my:
-			scar = "MERCEDES C-CLASS 2005"
+			scar = "MERCEDES C-CLASS 2005";
 			break;
 		default:
 			break;
