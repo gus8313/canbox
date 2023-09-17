@@ -142,7 +142,7 @@ uint8_t hw_can_get_msg(can_t * can, struct msg_can_t * msg, uint8_t idx)
 	return 1;
 }
 
-uint32_t speeds[e_speed_nums] = { 100000, 125000, 250000, 500000, 1000000 };
+uint32_t speeds[e_speed_nums] = { 83300, 100000, 125000, 250000, 500000, 1000000 };
 
 int32_t CAN_SetRxMsgObjAndMsk(CAN_T *tCAN, uint8_t u8MsgObj, uint8_t u8idType, uint32_t u32id, uint32_t u32idmask, uint8_t u8singleOrFifoLast);
 
